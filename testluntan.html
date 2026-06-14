@@ -3,1294 +3,340 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>回声论坛 — Echo Forum</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <title>在线论坛系统</title>
   <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, "Microsoft YaHei", sans-serif; background: #f5f5f5; color: #333; }
 
-    :root {
-      --bg: #0f0e0c;
-      --bg-raised: #1a1815;
-      --bg-surface: #222019;
-      --bg-hover: #2c2a22;
-      --border: #3a3628;
-      --border-light: #4a4535;
-      --accent: #d4a634;
-      --accent-dim: #b8912d;
-      --accent-glow: rgba(212, 166, 52, 0.15);
-      --text-primary: #f0ebe0;
-      --text-body: #c8c0b0;
-      --text-muted: #7a7265;
-      --text-faint: #554f45;
-      --green: #5cb87a;
-      --red: #c95d5d;
-      --blue: #5d8ec9;
-      --purple: #9b7ec9;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Source Serif 4', 'Noto Serif SC', Georgia, serif;
-      background: var(--bg);
-      color: var(--text-body);
-      line-height: 1.7;
-      min-height: 100vh;
-      position: relative;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-      opacity: 0.03;
-      pointer-events: none;
-      z-index: 9999;
-    }
-
-    a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
-    a:hover { color: var(--text-primary); }
-
-    /* ─── Header ─── */
-    .site-header {
-      background: linear-gradient(180deg, #1a1815 0%, var(--bg) 100%);
-      border-bottom: 1px solid var(--border);
-      padding: 0;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .header-top {
+    .header {
+      background: #2c3e50;
+      color: #fff;
+      padding: 12px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 16px 24px;
     }
-
-    .logo {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--accent);
-      letter-spacing: 0.02em;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .logo-icon {
-      width: 32px;
-      height: 32px;
-      border: 2px solid var(--accent);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      color: var(--accent);
-      font-family: 'DM Mono', monospace;
-    }
-
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .search-box {
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 8px 14px;
-      color: var(--text-body);
-      font-family: inherit;
-      font-size: 14px;
-      width: 220px;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      outline: none;
-    }
-
-    .search-box:focus {
-      border-color: var(--accent-dim);
-      box-shadow: 0 0 0 3px var(--accent-glow);
-    }
-
-    .search-box::placeholder { color: var(--text-faint); }
-
-    .btn {
-      font-family: 'DM Mono', monospace;
-      font-size: 13px;
-      padding: 8px 18px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      background: var(--bg-surface);
-      color: var(--text-body);
-      cursor: pointer;
-      transition: all 0.2s;
-      letter-spacing: 0.03em;
-    }
-
-    .btn:hover {
-      border-color: var(--accent-dim);
-      color: var(--text-primary);
-      background: var(--bg-hover);
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: var(--bg);
-      border-color: var(--accent);
-      font-weight: 500;
-    }
-
-    .btn-primary:hover {
-      background: var(--accent-dim);
-      border-color: var(--accent-dim);
-      color: var(--bg);
-    }
-
-    /* ─── Nav ─── */
-    .nav-bar {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 24px;
-      display: flex;
-      gap: 4px;
-      border-top: 1px solid var(--border);
-    }
-
-    .nav-link {
-      padding: 10px 16px;
-      font-family: 'DM Mono', monospace;
-      font-size: 12px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      border-bottom: 2px solid transparent;
-      transition: all 0.2s;
-      cursor: pointer;
-    }
-
-    .nav-link:hover { color: var(--text-primary); }
-    .nav-link.active {
-      color: var(--accent);
-      border-bottom-color: var(--accent);
-    }
-
-    /* ─── Layout ─── */
-    .main-wrap {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 28px 24px 60px;
-      display: grid;
-      grid-template-columns: 1fr 300px;
-      gap: 28px;
-    }
-
-    /* ─── Breadcrumb ─── */
-    .breadcrumb {
-      font-family: 'DM Mono', monospace;
-      font-size: 12px;
-      color: var(--text-faint);
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .breadcrumb span { color: var(--text-muted); }
-
-    /* ─── Section Titles ─── */
-    .section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 16px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .section-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 22px;
-      font-weight: 600;
-      color: var(--text-primary);
-      letter-spacing: 0.01em;
-    }
-
-    .section-badge {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      padding: 3px 10px;
-      border-radius: 20px;
-    }
-
-    /* ─── Category Cards ─── */
-    .categories-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 32px;
-    }
-
-    .category-card {
-      background: var(--bg-raised);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 18px 20px;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .category-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 3px;
-      height: 100%;
-      background: var(--cat-color, var(--accent));
-      opacity: 0.6;
-      transition: opacity 0.25s;
-    }
-
-    .category-card:hover {
-      border-color: var(--border-light);
-      background: var(--bg-surface);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-    }
-
-    .category-card:hover::before { opacity: 1; }
-
-    .cat-icon {
-      font-size: 20px;
-      margin-bottom: 8px;
-      display: block;
-    }
-
-    .cat-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 17px;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 4px;
-    }
-
-    .cat-desc {
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-    .cat-stats {
-      display: flex;
-      gap: 16px;
-      margin-top: 10px;
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      color: var(--text-faint);
-    }
-
-    /* ─── Thread List ─── */
-    .thread-list {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .thread-item {
-      display: grid;
-      grid-template-columns: 44px 1fr auto;
-      gap: 14px;
-      align-items: center;
-      padding: 14px 16px;
-      background: var(--bg-raised);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.2s;
-      animation: fadeUp 0.4s ease forwards;
-      opacity: 0;
-    }
-
-    .thread-item:nth-child(1) { animation-delay: 0.05s; }
-    .thread-item:nth-child(2) { animation-delay: 0.1s; }
-    .thread-item:nth-child(3) { animation-delay: 0.15s; }
-    .thread-item:nth-child(4) { animation-delay: 0.2s; }
-    .thread-item:nth-child(5) { animation-delay: 0.25s; }
-    .thread-item:nth-child(6) { animation-delay: 0.3s; }
-    .thread-item:nth-child(7) { animation-delay: 0.35s; }
-    .thread-item:nth-child(8) { animation-delay: 0.4s; }
-
-    .thread-item:hover {
-      border-color: var(--border-light);
-      background: var(--bg-surface);
-    }
-
-    .thread-item.pinned {
-      border-left: 2px solid var(--accent);
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .thread-avatar {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 700;
-      font-size: 18px;
-      color: var(--bg);
-      flex-shrink: 0;
-    }
-
-    .thread-body { min-width: 0; }
-
-    .thread-tags {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 4px;
-      flex-wrap: wrap;
-    }
-
-    .tag {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      padding: 2px 8px;
+    .header h1 { font-size: 18px; }
+    .header-right { display: flex; align-items: center; gap: 12px; }
+    .header-right span { font-size: 14px; }
+    .header-right button {
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      padding: 5px 14px;
       border-radius: 3px;
-      background: var(--accent-glow);
-      color: var(--accent);
-      border: 1px solid rgba(212, 166, 52, 0.2);
-    }
-
-    .tag.hot {
-      background: rgba(201, 93, 93, 0.12);
-      color: var(--red);
-      border-color: rgba(201, 93, 93, 0.2);
-    }
-
-    .tag.new {
-      background: rgba(92, 184, 122, 0.12);
-      color: var(--green);
-      border-color: rgba(92, 184, 122, 0.2);
-    }
-
-    .tag.pin {
-      background: rgba(93, 142, 201, 0.12);
-      color: var(--blue);
-      border-color: rgba(93, 142, 201, 0.2);
-    }
-
-    .thread-title {
-      font-size: 15px;
-      color: var(--text-primary);
-      font-weight: 600;
-      margin-bottom: 3px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      transition: color 0.2s;
-    }
-
-    .thread-item:hover .thread-title { color: var(--accent); }
-
-    .thread-meta {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      color: var(--text-faint);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .thread-meta .author { color: var(--text-muted); }
-
-    .thread-stats-col {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 4px;
-      flex-shrink: 0;
-    }
-
-    .reply-count {
-      font-family: 'DM Mono', monospace;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .reply-count .num { color: var(--text-primary); }
-
-    .last-reply {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      color: var(--text-faint);
-    }
-
-    /* ─── Sidebar ─── */
-    .sidebar { display: flex; flex-direction: column; gap: 20px; }
-
-    .sidebar-card {
-      background: var(--bg-raised);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 18px 20px;
-    }
-
-    .sidebar-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 14px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .stat-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 6px 0;
-      font-size: 13px;
-    }
-
-    .stat-label { color: var(--text-muted); }
-    .stat-value {
-      font-family: 'DM Mono', monospace;
-      color: var(--text-primary);
-      font-weight: 500;
-    }
-
-    .online-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--green);
-      display: inline-block;
-      margin-right: 6px;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
-
-    /* ─── User List ─── */
-    .user-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .user-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 6px 0;
-    }
-
-    .user-mini-avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 700;
-      font-size: 13px;
-      color: var(--bg);
-      flex-shrink: 0;
-    }
-
-    .user-info { min-width: 0; }
-
-    .user-name {
-      font-size: 13px;
-      color: var(--text-primary);
-      font-weight: 600;
-    }
-
-    .user-role {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      color: var(--text-faint);
-    }
-
-    /* ─── Trending ─── */
-    .trending-item {
-      padding: 8px 0;
-      border-bottom: 1px solid var(--border);
       cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .trending-item:last-child { border-bottom: none; }
-
-    .trending-item:hover .trending-title { color: var(--accent); }
-
-    .trending-num {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      color: var(--accent);
-      margin-bottom: 2px;
-    }
-
-    .trending-title {
       font-size: 13px;
-      color: var(--text-body);
-      font-weight: 600;
-      transition: color 0.2s;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
+    .header-right button:hover { opacity: 0.85; }
 
-    .trending-meta {
-      font-family: 'DM Mono', monospace;
-      font-size: 10px;
-      color: var(--text-faint);
-      margin-top: 2px;
-    }
+    .container { max-width: 800px; margin: 20px auto; padding: 0 16px; }
 
-    /* ─── Thread Detail Modal ─── */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(4px);
-      z-index: 200;
-      display: none;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 40px 20px;
-      overflow-y: auto;
-    }
-
-    .modal-overlay.open { display: flex; }
-
-    .modal-content {
-      background: var(--bg-raised);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      width: 100%;
-      max-width: 740px;
-      animation: modalIn 0.3s ease;
-    }
-
-    @keyframes modalIn {
-      from { opacity: 0; transform: translateY(20px) scale(0.98); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    .modal-header {
-      padding: 24px 28px 18px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-    }
-
-    .modal-close {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      font-size: 22px;
-      cursor: pointer;
-      padding: 4px 8px;
-      border-radius: 4px;
-      transition: all 0.2s;
-      line-height: 1;
-    }
-
-    .modal-close:hover {
-      background: var(--bg-surface);
-      color: var(--text-primary);
-    }
-
-    .modal-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--text-primary);
-      line-height: 1.3;
-    }
-
-    .modal-body { padding: 24px 28px; }
-
-    .post {
-      display: flex;
-      gap: 14px;
-      padding: 16px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .post:last-child { border-bottom: none; }
-
-    .post-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 700;
-      font-size: 16px;
-      color: var(--bg);
-      flex-shrink: 0;
-    }
-
-    .post-content { flex: 1; min-width: 0; }
-
-    .post-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-
-    .post-author {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-
-    .post-time {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      color: var(--text-faint);
-    }
-
-    .post-text {
-      font-size: 14px;
-      line-height: 1.75;
-      color: var(--text-body);
-    }
-
-    .post-actions {
-      display: flex;
-      gap: 14px;
-      margin-top: 10px;
-    }
-
-    .post-action {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      color: var(--text-faint);
-      cursor: pointer;
-      transition: color 0.2s;
-      background: none;
-      border: none;
-      padding: 0;
-    }
-
-    .post-action:hover { color: var(--accent); }
-
-    /* ─── Reply Box ─── */
-    .reply-box {
-      padding: 20px 28px;
-      border-top: 1px solid var(--border);
-    }
-
-    .reply-textarea {
-      width: 100%;
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
+    /* 登录区 */
+    .login-box {
+      background: #fff;
+      border: 1px solid #ddd;
       border-radius: 6px;
-      padding: 14px;
-      color: var(--text-body);
-      font-family: inherit;
+      padding: 30px;
+      text-align: center;
+      margin-top: 60px;
+    }
+    .login-box h2 { margin-bottom: 20px; font-size: 20px; }
+    .login-box input {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
       font-size: 14px;
+      width: 200px;
+      margin-bottom: 10px;
+    }
+    .login-box button {
+      padding: 8px 24px;
+      background: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .login-box button:hover { background: #2980b9; }
+
+    /* 发帖区 */
+    .post-form {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+    .post-form textarea {
+      width: 100%;
+      min-height: 70px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 10px;
+      font-size: 14px;
+      font-family: inherit;
       resize: vertical;
-      min-height: 90px;
       outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      line-height: 1.6;
     }
-
-    .reply-textarea:focus {
-      border-color: var(--accent-dim);
-      box-shadow: 0 0 0 3px var(--accent-glow);
-    }
-
-    .reply-textarea::placeholder { color: var(--text-faint); }
-
-    .reply-actions {
+    .post-form textarea:focus { border-color: #3498db; }
+    .post-form .actions {
       display: flex;
       justify-content: flex-end;
       margin-top: 10px;
+    }
+    .btn {
+      padding: 6px 18px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .btn-primary { background: #3498db; color: #fff; }
+    .btn-primary:hover { background: #2980b9; }
+    .btn-danger { background: #e74c3c; color: #fff; }
+    .btn-danger:hover { background: #c0392b; }
+    .btn-link { background: none; color: #3498db; padding: 0; text-decoration: underline; font-size: 13px; }
+    .btn-link:hover { color: #2980b9; }
+    .btn-sm { padding: 3px 10px; font-size: 12px; }
+
+    /* 帖子列表 */
+    .post-card {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .post-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .post-author {
+      font-weight: 700;
+      color: #2c3e50;
+      font-size: 14px;
+    }
+    .post-time { font-size: 12px; color: #999; }
+    .post-content { font-size: 14px; line-height: 1.6; margin-bottom: 10px; white-space: pre-wrap; }
+    .post-actions { display: flex; gap: 12px; }
+
+    /* 回复区 */
+    .replies {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid #eee;
+    }
+    .reply-item {
+      display: flex;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .reply-item:last-child { border-bottom: none; }
+    .reply-author { font-weight: 600; font-size: 13px; color: #2c3e50; min-width: 60px; }
+    .reply-content { font-size: 13px; color: #555; flex: 1; }
+    .reply-meta { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+    .reply-time { font-size: 11px; color: #aaa; }
+
+    .reply-form {
+      margin-top: 8px;
+      display: flex;
       gap: 8px;
     }
-
-    /* ─── New Thread Modal ─── */
-    .new-thread-modal .modal-body {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .form-input {
-      width: 100%;
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 10px 14px;
-      color: var(--text-body);
-      font-family: inherit;
-      font-size: 14px;
+    .reply-form input {
+      flex: 1;
+      padding: 6px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 13px;
       outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
     }
+    .reply-form input:focus { border-color: #3498db; }
 
-    .form-input:focus {
-      border-color: var(--accent-dim);
-      box-shadow: 0 0 0 3px var(--accent-glow);
-    }
-
-    .form-input::placeholder { color: var(--text-faint); }
-
-    .form-select {
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 10px 14px;
-      color: var(--text-body);
-      font-family: inherit;
-      font-size: 14px;
-      outline: none;
-      appearance: none;
-      cursor: pointer;
-    }
-
-    /* ─── Footer ─── */
-    .site-footer {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 24px;
-      border-top: 1px solid var(--border);
-      text-align: center;
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      color: var(--text-faint);
-    }
-
-    /* ─── Responsive ─── */
-    @media (max-width: 900px) {
-      .main-wrap {
-        grid-template-columns: 1fr;
-      }
-      .categories-grid {
-        grid-template-columns: 1fr;
-      }
-      .sidebar { order: -1; }
-    }
-
-    @media (max-width: 600px) {
-      .header-top { flex-wrap: wrap; gap: 12px; }
-      .search-box { width: 100%; order: 3; }
-      .thread-item { grid-template-columns: 36px 1fr; }
-      .thread-stats-col { display: none; }
-      .nav-bar { overflow-x: auto; }
-    }
-
-    /* ─── Scrollbar ─── */
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--border-light); }
-
-    /* ─── Utility ─── */
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      border: 0;
-    }
+    .empty { text-align: center; padding: 40px; color: #999; font-size: 14px; }
   </style>
 </head>
 <body>
 
   <!-- Header -->
-  <header class="site-header">
-    <div class="header-top">
-      <div class="logo">
-        <div class="logo-icon">E</div>
-        回声论坛
-      </div>
-      <div class="header-actions">
-        <input type="text" class="search-box" placeholder="搜索帖子、用户、话题…" aria-label="搜索">
-        <button class="btn" id="loginBtn">登录</button>
-        <button class="btn btn-primary" id="newThreadBtn">发布新帖</button>
-      </div>
-    </div>
-    <nav class="nav-bar" role="navigation">
-      <span class="nav-link active" data-view="home">首页</span>
-      <span class="nav-link" data-view="latest">最新</span>
-      <span class="nav-link" data-view="hot">热门</span>
-      <span class="nav-link" data-view="unanswered">未回复</span>
-    </nav>
-  </header>
-
-  <!-- Main Content -->
-  <main class="main-wrap">
-    <div class="content-area">
-
-      <!-- Breadcrumb -->
-      <div class="breadcrumb">
-        首页 <span>›</span> 所有版块
-      </div>
-
-      <!-- Categories -->
-      <section>
-        <div class="section-header">
-          <h2 class="section-title">版块分类</h2>
-          <span class="section-badge">6 个版块</span>
-        </div>
-        <div class="categories-grid">
-          <div class="category-card" style="--cat-color: #d4a634;" data-cat="tech">
-            <span class="cat-icon">&#x2318;</span>
-            <div class="cat-name">技术讨论</div>
-            <div class="cat-desc">编程、架构、工程实践，一切技术话题</div>
-            <div class="cat-stats">
-              <span>帖子 2,847</span>
-              <span>今日 +18</span>
-            </div>
-          </div>
-          <div class="category-card" style="--cat-color: #5cb87a;" data-cat="design">
-            <span class="cat-icon">&#x25C6;</span>
-            <div class="cat-name">设计创意</div>
-            <div class="cat-desc">UI/UX、平面设计、创意灵感交流</div>
-            <div class="cat-stats">
-              <span>帖子 1,203</span>
-              <span>今日 +7</span>
-            </div>
-          </div>
-          <div class="category-card" style="--cat-color: #5d8ec9;" data-cat="life">
-            <span class="cat-icon">&#x2600;</span>
-            <div class="cat-name">生活杂谈</div>
-            <div class="cat-desc">日常分享、生活感悟、随想杂记</div>
-            <div class="cat-stats">
-              <span>帖子 5,691</span>
-              <span>今日 +34</span>
-            </div>
-          </div>
-          <div class="category-card" style="--cat-color: #c95d5d;" data-cat="creative">
-            <span class="cat-icon">&#x266B;</span>
-            <div class="cat-name">创作分享</div>
-            <div class="cat-desc">文字、摄影、音乐、视频等原创作品</div>
-            <div class="cat-stats">
-              <span>帖子 876</span>
-              <span>今日 +5</span>
-            </div>
-          </div>
-          <div class="category-card" style="--cat-color: #9b7ec9;" data-cat="reading">
-            <span class="cat-icon">&#x2261;</span>
-            <div class="cat-name">读书会</div>
-            <div class="cat-desc">书评推荐、阅读笔记、好书共读</div>
-            <div class="cat-stats">
-              <span>帖子 642</span>
-              <span>今日 +3</span>
-            </div>
-          </div>
-          <div class="category-card" style="--cat-color: #7ac9a8;" data-cat="feedback">
-            <span class="cat-icon">&#x2731;</span>
-            <div class="cat-name">站务建议</div>
-            <div class="cat-desc">论坛规则、功能建议、问题反馈</div>
-            <div class="cat-stats">
-              <span>帖子 319</span>
-              <span>今日 +1</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Thread List -->
-      <section>
-        <div class="section-header">
-          <h2 class="section-title">最新帖子</h2>
-          <span class="section-badge">按时间排序</span>
-        </div>
-        <div class="thread-list" id="threadList">
-          <!-- Threads populated by JS -->
-        </div>
-      </section>
-
-    </div>
-
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="sidebar-card">
-        <div class="sidebar-title">论坛统计</div>
-        <div class="stat-row">
-          <span class="stat-label">注册用户</span>
-          <span class="stat-value">12,483</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-label">总帖子数</span>
-          <span class="stat-value">68,291</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-label">总回复数</span>
-          <span class="stat-value">342,078</span>
-        </div>
-        <div class="stat-row">
-          <span class="stat-label"><span class="online-dot"></span>在线用户</span>
-          <span class="stat-value" id="onlineCount">347</span>
-        </div>
-      </div>
-
-      <div class="sidebar-card">
-        <div class="sidebar-title">活跃用户</div>
-        <div class="user-list" id="activeUsers">
-          <!-- Populated by JS -->
-        </div>
-      </div>
-
-      <div class="sidebar-card">
-        <div class="sidebar-title">本周热议</div>
-        <div id="trendingTopics">
-          <!-- Populated by JS -->
-        </div>
-      </div>
-    </aside>
-  </main>
-
-  <!-- Thread Detail Modal -->
-  <div class="modal-overlay" id="threadModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title" id="modalTitle"></h3>
-        <button class="modal-close" id="modalClose">&times;</button>
-      </div>
-      <div class="modal-body" id="modalBody">
-        <!-- Posts populated by JS -->
-      </div>
-      <div class="reply-box">
-        <textarea class="reply-textarea" placeholder="写下你的回复…" id="replyInput"></textarea>
-        <div class="reply-actions">
-          <button class="btn" onclick="document.getElementById('threadModal').classList.remove('open')">取消</button>
-          <button class="btn btn-primary" id="submitReply">发布回复</button>
-        </div>
-      </div>
+  <div class="header" id="header" style="display:none;">
+    <h1>在线论坛系统</h1>
+    <div class="header-right">
+      <span id="currentUser"></span>
+      <button onclick="logout()">退出登录</button>
     </div>
   </div>
 
-  <!-- New Thread Modal -->
-  <div class="modal-overlay new-thread-modal" id="newThreadModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title">发布新帖</h3>
-        <button class="modal-close" onclick="document.getElementById('newThreadModal').classList.remove('open')">&times;</button>
-      </div>
-      <div class="modal-body">
-        <input type="text" class="form-input" placeholder="帖子标题" id="newTitle">
-        <select class="form-input form-select" id="newCategory">
-          <option value="">选择版块…</option>
-          <option value="tech">技术讨论</option>
-          <option value="design">设计创意</option>
-          <option value="life">生活杂谈</option>
-          <option value="creative">创作分享</option>
-          <option value="reading">读书会</option>
-          <option value="feedback">站务建议</option>
-        </select>
-        <textarea class="reply-textarea" placeholder="帖子内容…" id="newContent" style="min-height:160px"></textarea>
-        <div class="reply-actions">
-          <button class="btn" onclick="document.getElementById('newThreadModal').classList.remove('open')">取消</button>
-          <button class="btn btn-primary" id="submitThread">发布</button>
-        </div>
+  <div class="container">
+
+    <!-- 登录页面 -->
+    <div id="loginPage">
+      <div class="login-box">
+        <h2>在线论坛系统</h2>
+        <input type="text" id="usernameInput" placeholder="请输入用户名" onkeydown="if(event.key==='Enter')login()">
+        <br>
+        <button onclick="login()">登录</button>
       </div>
     </div>
-  </div>
 
-  <footer class="site-footer">
-    回声论坛 Echo Forum &copy; 2026 &mdash; 测试环境 &mdash; 数据仅供演示
-  </footer>
+    <!-- 论坛主页 -->
+    <div id="forumPage" style="display:none;">
+      <!-- 发帖 -->
+      <div class="post-form">
+        <textarea id="newPostContent" placeholder="发表你的帖子..."></textarea>
+        <div class="actions">
+          <button class="btn btn-primary" onclick="addPost()">发表</button>
+        </div>
+      </div>
+
+      <!-- 帖子列表 -->
+      <div id="postList"></div>
+    </div>
+
+  </div>
 
 <script>
-  // ─── Mock Data ───
-  const avatarColors = ['#d4a634','#5cb87a','#5d8ec9','#c95d5d','#9b7ec9','#7ac9a8','#c9895d','#5dc9b8'];
+  let currentUser = null;
 
-  const threads = [
-    { id:1, title:'2026 年最值得学习的编程语言是什么？', author:'深海鱼', avatar:'深', color:'#5d8ec9', cat:'tech', tags:['hot'], replies:128, views:3420, time:'10 分钟前', pinned:true },
-    { id:2, title:'用 Rust 重写了一个 CLI 工具，性能提升 40 倍', author:'铁锈猎人', avatar:'铁', color:'#c95d5d', cat:'tech', tags:['new'], replies:67, views:1893, time:'32 分钟前', pinned:false },
-    { id:3, title:'分享我的极简主义工作台布置', author:'木白', avatar:'木', color:'#7ac9a8', cat:'life', tags:[], replies:43, views:876, time:'1 小时前', pinned:false },
-    { id:4, title:'如何让配色方案更有「呼吸感」？', author:'调色盘', avatar:'调', color:'#d4a634', cat:'design', tags:['hot'], replies:89, views:2100, time:'1 小时前', pinned:false },
-    { id:5, title:'读完《百年孤独》的一些碎片感受', author:'书虫阿九', avatar:'书', color:'#9b7ec9', cat:'reading', tags:['new'], replies:31, views:542, time:'2 小时前', pinned:false },
-    { id:6, title:'一段短片：暴雨后的城市倒影', author:'镜头诗人', avatar:'镜', color:'#c9895d', cat:'creative', tags:[], replies:24, views:410, time:'3 小时前', pinned:false },
-    { id:7, title:'建议增加帖子收藏夹功能', author:'小透明', avatar:'小', color:'#5dc9b8', cat:'feedback', tags:['new'], replies:16, views:320, time:'3 小时前', pinned:false },
-    { id:8, title:'从零开始搭建一个个人知识管理系统', author:'思维导图', avatar:'思', color:'#5d8ec9', cat:'tech', tags:[], replies:52, views:1560, time:'4 小时前', pinned:false },
+  // 初始示例数据
+  let posts = [
+    { id: 1, author: 'admin', content: '这是一个自动发布的内容，欢迎来到论坛！', time: '10分钟前', replies: [
+      { author: 'tony', content: '你好，论坛看起来不错！', time: '5分钟前' },
+      { author: 'user01', content: '第一次来，大家好。', time: '2分钟前' }
+    ]},
+    { id: 2, author: 'admin', content: '这是一个测试帖子，用于演示论坛功能。', time: '8分钟前', replies: [] }
   ];
 
-  const threadReplies = {
-    1: [
-      { author:'深海鱼', avatar:'深', color:'#5d8ec9', time:'10 分钟前', text:'我认为 Python 依然是入门和数据领域的首选，但 Rust 和 Go 在系统级和云原生方面的势头非常强劲。TypeScript 也已经是前端的事实标准了。大家怎么看？' },
-      { author:'代码搬运工', avatar:'代', color:'#d4a634', time:'25 分钟前', text:'推荐 Rust。学曲线虽陡，但一旦上手后写代码的自信感完全不同。编译器帮你抓 bug，这种安全感是其他语言给不了的。' },
-      { author:'前端小王子', avatar:'前', color:'#c95d5d', time:'38 分钟前', text:'TypeScript + 1。现在后端也有 Deno 和 Bun，TypeScript 的全栈能力越来越强了。' },
-      { author:'算法苦手', avatar:'算', color:'#9b7ec9', time:'1 小时前', text:'如果目标是找工作的话，Java 和 Python 依然是最稳的选择。不过如果追求技术深度，Rust 确实值得投入。' },
-      { author:'深夜码农', avatar:'深', color:'#5cb87a', time:'2 小时前', text:'别忘了 Zig，虽然小众但在底层开发圈子里越来越受欢迎了。' },
-    ],
-    2: [
-      { author:'铁锈猎人', avatar:'铁', color:'#c95d5d', time:'32 分钟前', text:'原来用 Python 写的数据处理管道跑一次要 12 分钟，用 Rust 重写后只要 18 秒。主要是零拷贝解析和 SIMD 加速带来的提升。' },
-      { author:'性能狂魔', avatar:'性', color:'#d4a634', time:'45 分钟前', text:'太强了，可以分享一下 GitHub 仓库吗？想学习一下你的解析策略。' },
-    ],
-    3: [
-      { author:'木白', avatar:'木', color:'#7ac9a8', time:'1 小时前', text:'最近把桌面清理到只剩显示器、键盘和一杯水。感觉专注力提升了不止一个档次。less is more。' },
-    ],
-  };
+  let nextId = 3;
 
-  const activeUsers = [
-    { name:'深海鱼', role:'版主 · 技术讨论', avatar:'深', color:'#5d8ec9' },
-    { name:'调色盘', role:'活跃会员', avatar:'调', color:'#d4a634' },
-    { name:'书虫阿九', role:'读书会版主', avatar:'书', color:'#9b7ec9' },
-    { name:'铁锈猎人', role:'活跃会员', avatar:'铁', color:'#c95d5d' },
-    { name:'镜头诗人', role:'创作达人', avatar:'镜', color:'#c9895d' },
-  ];
-
-  const trending = [
-    { num:'#1', title:'Rust 重写 CLI 工具性能提升 40x', meta:'128 回复 · 3.4k 浏览' },
-    { num:'#2', title:'2026 最值得学的编程语言', meta:'89 回复 · 2.1k 浏览' },
-    { num:'#3', title:'极简工作台布置分享', meta:'43 回复 · 876 浏览' },
-    { num:'#4', title:'配色方案的呼吸感', meta:'67 回复 · 1.8k 浏览' },
-    { num:'#5', title:'个人知识管理系统搭建', meta:'52 回复 · 1.5k 浏览' },
-  ];
-
-  // ─── Render Threads ───
-  function renderThreads() {
-    const list = document.getElementById('threadList');
-    list.innerHTML = threads.map(t => `
-      <div class="thread-item ${t.pinned ? 'pinned' : ''}" data-id="${t.id}">
-        <div class="thread-avatar" style="background:${t.color}">${t.avatar}</div>
-        <div class="thread-body">
-          <div class="thread-tags">
-            ${t.pinned ? '<span class="tag pin">置顶</span>' : ''}
-            ${t.tags.map(tag => `<span class="tag ${tag}">${tag === 'hot' ? '热' : '新'}</span>`).join('')}
-          </div>
-          <div class="thread-title">${t.title}</div>
-          <div class="thread-meta">
-            <span class="author">${t.author}</span>
-            <span>·</span>
-            <span>${t.time}</span>
-            <span>·</span>
-            <span>${t.views} 浏览</span>
-          </div>
-        </div>
-        <div class="thread-stats-col">
-          <div class="reply-count"><span class="num">${t.replies}</span> 回复</div>
-          <div class="last-reply">${t.time}</div>
-        </div>
-      </div>
-    `).join('');
-
-    // Click handlers
-    list.querySelectorAll('.thread-item').forEach(el => {
-      el.addEventListener('click', () => openThread(+el.dataset.id));
-    });
+  // ─── 登录 ───
+  function login() {
+    const name = document.getElementById('usernameInput').value.trim();
+    if (!name) { alert('请输入用户名'); return; }
+    currentUser = name;
+    document.getElementById('header').style.display = 'flex';
+    document.getElementById('currentUser').textContent = name;
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('forumPage').style.display = 'block';
+    renderPosts();
   }
 
-  // ─── Render Sidebar ───
-  function renderSidebar() {
-    const usersEl = document.getElementById('activeUsers');
-    usersEl.innerHTML = activeUsers.map(u => `
-      <div class="user-row">
-        <div class="user-mini-avatar" style="background:${u.color}">${u.avatar}</div>
-        <div class="user-info">
-          <div class="user-name">${u.name}</div>
-          <div class="user-role">${u.role}</div>
-        </div>
-      </div>
-    `).join('');
-
-    const trendingEl = document.getElementById('trendingTopics');
-    trendingEl.innerHTML = trending.map(t => `
-      <div class="trending-item">
-        <div class="trending-num">${t.num}</div>
-        <div class="trending-title">${t.title}</div>
-        <div class="trending-meta">${t.meta}</div>
-      </div>
-    `).join('');
+  function logout() {
+    currentUser = null;
+    document.getElementById('header').style.display = 'none';
+    document.getElementById('forumPage').style.display = 'none';
+    document.getElementById('loginPage').style.display = 'block';
+    document.getElementById('usernameInput').value = '';
   }
 
-  // ─── Open Thread Detail ───
-  function openThread(id) {
-    const thread = threads.find(t => t.id === id);
-    if (!thread) return;
-
-    document.getElementById('modalTitle').textContent = thread.title;
-
-    const replies = threadReplies[id] || [
-      { author: thread.author, avatar: thread.avatar, color: thread.color, time: thread.time, text: '帖子内容加载中…（测试数据）' }
-    ];
-
-    const body = document.getElementById('modalBody');
-    body.innerHTML = replies.map(r => `
-      <div class="post">
-        <div class="post-avatar" style="background:${r.color}">${r.avatar}</div>
-        <div class="post-content">
-          <div class="post-header">
-            <span class="post-author">${r.author}</span>
-            <span class="post-time">${r.time}</span>
-          </div>
-          <div class="post-text">${r.text}</div>
-          <div class="post-actions">
-            <button class="post-action">&#9825; 赞同</button>
-            <button class="post-action">&#8634; 回复</button>
-            <button class="post-action">&#8943; 更多</button>
-          </div>
-        </div>
-      </div>
-    `).join('');
-
-    document.getElementById('threadModal').classList.add('open');
-    document.getElementById('replyInput').value = '';
-  }
-
-  // ─── Submit Reply ───
-  document.getElementById('submitReply').addEventListener('click', () => {
-    const input = document.getElementById('replyInput');
-    const text = input.value.trim();
-    if (!text) return;
-
-    const body = document.getElementById('modalBody');
-    const newPost = document.createElement('div');
-    newPost.className = 'post';
-    newPost.innerHTML = `
-      <div class="post-avatar" style="background:#5dc9b8">我</div>
-      <div class="post-content">
-        <div class="post-header">
-          <span class="post-author">当前用户</span>
-          <span class="post-time">刚刚</span>
-        </div>
-        <div class="post-text">${text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
-        <div class="post-actions">
-          <button class="post-action">&#9825; 赞同</button>
-          <button class="post-action">&#8634; 回复</button>
-          <button class="post-action">&#8943; 更多</button>
-        </div>
-      </div>
-    `;
-    body.appendChild(newPost);
-    input.value = '';
-    body.scrollTop = body.scrollHeight;
-  });
-
-  // ─── New Thread ───
-  document.getElementById('newThreadBtn').addEventListener('click', () => {
-    document.getElementById('newThreadModal').classList.add('open');
-  });
-
-  document.getElementById('submitThread').addEventListener('click', () => {
-    const title = document.getElementById('newTitle').value.trim();
-    const content = document.getElementById('newContent').value.trim();
-    if (!title) return;
-
-    const colors = avatarColors;
-    const color = colors[Math.floor(Math.random() * colors.length)];
-
-    threads.unshift({
-      id: threads.length + 1,
-      title: title,
-      author: '当前用户',
-      avatar: '我',
-      color: '#5dc9b8',
-      cat: document.getElementById('newCategory').value || 'life',
-      tags: ['new'],
-      replies: 0,
-      views: 1,
+  // ─── 发帖 ───
+  function addPost() {
+    const content = document.getElementById('newPostContent').value.trim();
+    if (!content) { alert('内容不能为空'); return; }
+    posts.unshift({
+      id: nextId++,
+      author: currentUser,
+      content: content,
       time: '刚刚',
-      pinned: false,
+      replies: []
     });
+    document.getElementById('newPostContent').value = '';
+    renderPosts();
+  }
 
-    if (content) {
-      threadReplies[threads[0].id] = [
-        { author:'当前用户', avatar:'我', color:'#5dc9b8', time:'刚刚', text: content }
-      ];
+  // ─── 删除帖子 ───
+  function deletePost(id) {
+    if (!confirm('确定删除这条帖子吗？')) return;
+    posts = posts.filter(p => p.id !== id);
+    renderPosts();
+  }
+
+  // ─── 修改帖子 ───
+  function editPost(id) {
+    const post = posts.find(p => p.id === id);
+    if (!post) return;
+    const newContent = prompt('修改帖子内容：', post.content);
+    if (newContent !== null && newContent.trim()) {
+      post.content = newContent.trim();
+      renderPosts();
+    }
+  }
+
+  // ─── 回复 ───
+  function addReply(postId) {
+    const input = document.getElementById('reply-' + postId);
+    const content = input.value.trim();
+    if (!content) return;
+    const post = posts.find(p => p.id === postId);
+    if (!post) return;
+    post.replies.push({
+      author: currentUser,
+      content: content,
+      time: '刚刚'
+    });
+    input.value = '';
+    renderPosts();
+  }
+
+  // ─── 删除回复 ───
+  function deleteReply(postId, replyIndex) {
+    if (!confirm('确定删除这条回复吗？')) return;
+    const post = posts.find(p => p.id === postId);
+    if (!post) return;
+    post.replies.splice(replyIndex, 1);
+    renderPosts();
+  }
+
+  // ─── 渲染 ───
+  function renderPosts() {
+    const list = document.getElementById('postList');
+    if (posts.length === 0) {
+      list.innerHTML = '<div class="empty">暂无帖子</div>';
+      return;
     }
 
-    renderThreads();
-    document.getElementById('newThreadModal').classList.remove('open');
-    文档.通过ID获取元素('新标题').值 = '';
-    文档.通过ID获取元素('新内容').值 = '';
-    document.getElementById('newCategory').selectedIndex = 0;
-  });
+    list.innerHTML = posts.map(p => {
+      const canEdit = p.author === currentUser || currentUser === 'admin';
+      const repliesHtml = p.replies.map((r, i) => {
+        const canDelReply = r.author === currentUser || currentUser === 'admin';
+        return `
+          <div class="reply-item">
+            <span class="reply-author">${r.author}</span>
+            <div style="flex:1">
+              <span class="reply-content">${r.content}</span>
+              <div class="reply-meta">
+                <span class="reply-time">${r.time}</span>
+                ${canDelReply ? '<button class="btn-link btn-sm" onclick="deleteReply('+p.id+','+i+')">删除</button>' : ''}
+              </div>
+            </div>
+          </div>`;
+      }).join('');
 
-  // ─── Close Modals ───
-  document.getElementById('modalClose').addEventListener('click', () => {
-    document.getElementById('threadModal').classList.remove('open');
-  });
-
-  document.getElementById('threadModal').addEventListener('click', (e) => {
-    if (e.target === e.currentTarget) e.currentTarget.classList.remove('open');
-  });
-
-  document.getElementById('newThreadModal').addEventListener('click', (e) => {
-    if (e.target === e.currentTarget) e.currentTarget.classList.remove('open');
-  });
-
-  document.addEventListener('keydown', (e) => {
-    如果 (事件.键 === 'Escape') {
-      文档.通过ID获取元素('threadModal').类列表.移除('open');
-      文档.通过ID获取元素('newThreadModal').类列表.移除('open');
-    输入：}
-  });
-
-  // ─── 登录模拟 ───
-  文档.通过ID获取元素('登录按钮').添加事件监听器('点击', () => {
-    常量 按钮 = 文档.通过ID获取元素('登录按钮');
-    如果 (按钮.文本内容 === '登录') {
-      按钮.文本内容 = '当前用户';
-      按钮.样式.边框颜色 = 'var(--green)';
-      按钮.样式.颜色 = 'var(--绿色)';
-    } 否则 {
-      按钮.文本内容 = '登录';
-      按钮.样式.边框颜色 = '';
-      按钮.样式.颜色 = '';
-    输入：}
-  });
-
-  // ─── 导航 ───
-  文档.querySelectorAll(''.nav-link'').forEach(link => {
-    链接.addEventListener('点击', () => {
-      文档.querySelectorAll(''.nav-link'').forEach(l => l.classList.remove('active'));
-      链接.类列表.添加('活动');
-    });
-  });
-
-  // ─── 在线人数波动 ───
-  setInterval(() => {
-    常量 el = 文档.通过ID获取元素('在线人数');
-    常量 当前 = 解析整数(元素.文本内容);
-    常量 增量 = 数学.向下取整(数学.随机() * 5) - 2;
-    el.textContent = Math.max(300, 当前 + 增量);
-  }, 5000);
-
-  // ─── 初始化 ───
-  渲染线程();
-  渲染侧边栏();
-</脚本>
-</身体>
+      return `
+        <div class="post-card">
+          <div class="post-header">
+            <span class="post-author">${p.author}</span>
+            <span class="post-time">${p.time}</span>
+          </div>
+          <div class="post-content">${p.content.replace(/</g,'&lt;')}</div>
+          <div class="post-actions">
+            ${canEdit ? '<button class="btn btn-primary btn-sm" onclick="editPost('+p.id+')">修改</button>' : ''}
+            ${canEdit ? '<button class="btn btn-danger btn-sm" onclick="deletePost('+p.id+')">删除</button>' : ''}
+          </div>
+          <div class="replies">
+            ${p.replies.length > 0 ? repliesHtml : ''}
+            <div class="reply-form">
+              <input type="text" id="reply-${p.id}" placeholder="回复..." onkeydown="if(event.key==='Enter')addReply(${p.id})">
+              <button class="btn btn-primary btn-sm" onclick="addReply(${p.id})">回复</button>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+</script>
+</body>
 </html>
