@@ -1,64 +1,64 @@
-
-html lang="zh-CN">
-<head>head>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>回声论坛 — 回声论坛</title><title>回声论坛 — Echo Forum</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.googleapis.com">
+  <title>回声论坛 — Echo Forum</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
       --bg: #0f0e0c;
-      --背景提升：#1a1815;
+      --bg-raised: #1a1815;
       --bg-surface: #222019;
       --bg-hover: #2c2a22;
-      --边框: #3a3628;
-      --边框浅色: #4a4535;
-      -- accent: #d4a634;
-      -- accent-dim: #b8912d;
-      -- accent-glow: rgba(212, 166, 52, 0.15);
+      --border: #3a3628;
+      --border-light: #4a4535;
+      --accent: #d4a634;
+      --accent-dim: #b8912d;
+      --accent-glow: rgba(212, 166, 52, 0.15);
       --text-primary: #f0ebe0;
-      --文本主体: #c8c0b0;
-      --文本模糊: #7a7265;
-      --文本弱化: #554f45;
-      --绿色: #5cb87a;
-      --红色: #c95d5d;
-      --蓝色: #5d8ec9;
-      --紫色: #9b7ec9;
+      --text-body: #c8c0b0;
+      --text-muted: #7a7265;
+      --text-faint: #554f45;
+      --green: #5cb87a;
+      --red: #c95d5d;
+      --blue: #5d8ec9;
+      --purple: #9b7ec9;
     }
 
     html { scroll-behavior: smooth; }
 
     body {
-      字体：'Source Serif 4'，'Noto Serif SC'，Georgia，衬线字体；font-family: 'Source Serif 4', 'Noto Serif SC', Georgia, serif;
-      背景: var(--bg);background: var(--bg);
-      颜色: var(--text-body);color: var(--text-body);
-      行高: 1.7;line-height: 1.7;
-      最小高度：100vh;min-height: 100vh;
-      position: 相对;position: relative;
-    }}
+      font-family: 'Source Serif 4', 'Noto Serif SC', Georgia, serif;
+      background: var(--bg);
+      color: var(--text-body);
+      line-height: 1.7;
+      min-height: 100vh;
+      position: relative;
+    }
 
-    body::before {body::before {
-      内容: ''content: '';
-      position: fixed;position: fixed;
-      插图：0；inset: 0;
-      背景图像: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(#n)' opacity='1'%3E%3C/svg%3E");background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-      不透明度: 0.03;opacity: 0.03;
-      pointer-events: 无;pointer-events: none;
-      z-index: 9999;z-index: 9999;
-    }}
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: 9999;
+    }
 
-    a { color: var(--accent); 文本装饰: 无; 过渡: color 0.2s; }
+    a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
     a:hover { color: var(--text-primary); }
 
-    /* ─── 头部 ─── */
+    /* ─── Header ─── */
     .site-header {
-      背景: 线性渐变(180度, #1a1815 0%, var(--bg) 100%);
-      边框下: 1px solid var(--border);
-      填充: 0;
-      position: 粘性;
+      background: linear-gradient(180deg, #1a1815 0%, var(--bg) 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 0;
+      position: sticky;
       top: 0;
       z-index: 100;
     }
@@ -1233,8 +1233,8 @@ html lang="zh-CN">
 
     renderThreads();
     document.getElementById('newThreadModal').classList.remove('open');
-    document.getElementById('newTitle').value = '';
-    document.getElementById('newContent').value = '';
+    文档.通过ID获取元素('新标题').值 = '';
+    文档.通过ID获取元素('新内容').值 = '';
     document.getElementById('newCategory').selectedIndex = 0;
   });
 
@@ -1252,45 +1252,45 @@ html lang="zh-CN">
   });
 
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      document.getElementById('threadModal').classList.remove('open');
-      document.getElementById('newThreadModal').classList.remove('open');
-    }
+    如果 (事件.键 === 'Escape') {
+      文档.通过ID获取元素('threadModal').类列表.移除('open');
+      文档.通过ID获取元素('newThreadModal').类列表.移除('open');
+    输入：}
   });
 
-  // ─── Login Mock ───
-  document.getElementById('loginBtn').addEventListener('click', () => {
-    const btn = document.getElementById('loginBtn');
-    if (btn.textContent === '登录') {
-      btn.textContent = '当前用户';
-      btn.style.borderColor = 'var(--green)';
-      btn.style.color = 'var(--green)';
-    } else {
-      btn.textContent = '登录';
-      btn.style.borderColor = '';
-      btn.style.color = '';
-    }
+  // ─── 登录模拟 ───
+  文档.通过ID获取元素('登录按钮').添加事件监听器('点击', () => {
+    常量 按钮 = 文档.通过ID获取元素('登录按钮');
+    如果 (按钮.文本内容 === '登录') {
+      按钮.文本内容 = '当前用户';
+      按钮.样式.边框颜色 = 'var(--green)';
+      按钮.样式.颜色 = 'var(--绿色)';
+    } 否则 {
+      按钮.文本内容 = '登录';
+      按钮.样式.边框颜色 = '';
+      按钮.样式.颜色 = '';
+    输入：}
   });
 
-  // ─── Nav ───
-  document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-      link.classList.add('active');
+  // ─── 导航 ───
+  文档.querySelectorAll(''.nav-link'').forEach(link => {
+    链接.addEventListener('点击', () => {
+      文档.querySelectorAll(''.nav-link'').forEach(l => l.classList.remove('active'));
+      链接.类列表.添加('活动');
     });
   });
 
-  // ─── Online count fluctuation ───
+  // ─── 在线人数波动 ───
   setInterval(() => {
-    const el = document.getElementById('onlineCount');
-    const current = parseInt(el.textContent);
-    const delta = Math.floor(Math.random() * 5) - 2;
-    el.textContent = Math.max(300, current + delta);
+    常量 el = 文档.通过ID获取元素('在线人数');
+    常量 当前 = 解析整数(元素.文本内容);
+    常量 增量 = 数学.向下取整(数学.随机() * 5) - 2;
+    el.textContent = Math.max(300, 当前 + 增量);
   }, 5000);
 
-  // ─── Init ───
-  renderThreads();
-  renderSidebar();
-</script>
-</body>
+  // ─── 初始化 ───
+  渲染线程();
+  渲染侧边栏();
+</脚本>
+</身体>
 </html>
